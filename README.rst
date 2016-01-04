@@ -2,8 +2,8 @@
 Sensu client for python
 =============================
 
-.. image:: https://badge.fury.io/py/pysensu.png
-    :target: http://badge.fury.io/py/pysensu
+.. image:: https://badge.fury.io/py/pysensu-ng.svg
+    :target: https://badge.fury.io/py/pysensu-ng
 
 .. image:: https://travis-ci.org/sangoma/pysensu.png?branch=master
     :target: https://travis-ci.org/sangoma/pysensu
