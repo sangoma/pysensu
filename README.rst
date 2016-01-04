@@ -8,8 +8,8 @@ Sensu client for python
 .. image:: https://travis-ci.org/sangoma/pysensu.png?branch=master
     :target: https://travis-ci.org/sangoma/pysensu
 
-.. image:: https://pypip.in/d/pysensu/badge.png
-    :target: https://pypi.python.org/sangoma/pysensu
+.. image:: https://pypip.in/d/pysensu-ng/badge.png
+    :target: https://pypi.python.org/sangoma/pysensu-ng
 
 
 This is a client for interact with the Sensu API
