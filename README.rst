@@ -12,7 +12,7 @@ Sensu client for python
     :target: https://pypi.python.org/sangoma/pysensu-ng
 
 
-This is a client for interact with the Sensu API
+This is a client to interact with the Sensu API
 
 
 Features
