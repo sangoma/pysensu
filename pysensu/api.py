@@ -82,7 +82,7 @@ class SensuAPI(object):
         """
         Removes a client, resolving its current events. (delayed action)
         """
-        data = self._request('DELETE', '/clients/{}'.format(client))
+        self._request('DELETE', '/clients/{}'.format(client))
         return True
 
     """
@@ -113,15 +113,15 @@ class SensuAPI(object):
         """
         Resolves an event for a given check on a given client. (delayed action)
         """
-        data = self._request('DELETE', '/events/{}/{}'.format(client, check))
+        self._request('DELETE', '/events/{}/{}'.format(client, check))
         return True
 
     def post_event(self, client, check):
         """
         Resolves an event. (delayed action)
         """
-        data = self._request('POST', '/resolve',
-                             json.dumps({'client': client, 'check': check}))
+        self._request('POST', '/resolve',
+                      json.dumps({'client': client, 'check': check}))
         return True
 
     """
@@ -131,46 +131,51 @@ class SensuAPI(object):
         """
         Returns the list of checks.
         """
-        data = self._api_call('GET', '/checks')
+        data = self._request('GET', '/checks')
         return data.json()
 
     def get_check(self, check):
         """
         Returns a check.
         """
-        data = self._api_call('GET', '/checks/{}'.format(check))
+        data = self._request('GET', '/checks/{}'.format(check))
         return data.json()
 
     def post_check_request(self, check, subscribers):
         """
         Issues a check execution request.
         """
-        data = self._api_call('POST', '/request', json.dumps(data))
+        data = {
+            'check': check,
+            'subscribers': subscribers
+        }
+        self._request('POST', '/request', json.dumps(data))
         return True
 
     """
     Stashes ops
     """
     def get_stashes(self):
-	    """
+        """
         Returns a list of stashes.
-	    """
-	    data = self._request('GET', '/stashes')
-	    return data.json()
+        """
+        data = self._request('GET', '/stashes')
+        return data.json()
 
     def create_stash(self, payload, path=None):
         """
         Create a stash. (JSON document)
         """
         if path:
-            data = self._request('POST', '/stashes/{}/{}'.format(path), json.dumps(payload))
+            self._request('POST', '/stashes/{}/{}'.format(path),
+                          json.dumps(payload))
         else:
-            data = self._request('POST', '/stashes/'.format(client), json.dumps(payload))
+            self._request('POST', '/stashes/', json.dumps(payload))
         return True
 
     def delete_stash(self, path):
         """
         Delete a stash. (JSON document)
         """
-        data = self._request('DELETE', '/stashes/{}'.format(path))
+        self._request('DELETE', '/stashes/{}'.format(path))
         return True
