@@ -2,6 +2,7 @@ import json
 import logging
 
 import requests
+from requests.auth import HTTPBasicAuth
 from pysensu import USER_AGENT
 
 logger = logging.getLogger(__name__)
@@ -12,29 +13,37 @@ class SensuAPIException(Exception):
 
 
 class SensuAPI(object):
-    def __init__(self, url_base):
+    def __init__(self, url_base, username=None, password=None):
         self._url_base = url_base
         self._header = {
             'User-Agent': USER_AGENT
         }
         self.good_status = (200, 201, 202, 204)
 
+        if username and password:
+            self.auth = HTTPBasicAuth(username, password)
+        else:
+            self.auth = None
+
     def _request(self, method, path, **kwargs):
         url = '{}{}'.format(self._url_base, path)
         logger.debug('{} -> {} with {}'.format(method, url, kwargs))
 
         if method == 'GET':
-            resp = requests.get(url, headers=self._header, **kwargs)
+            resp = requests.get(url, auth=self.auth, headers=self._header,
+                                **kwargs)
 
         elif method == 'POST':
-            resp = requests.post(url, headers=self._header, **kwargs)
+            resp = requests.post(url, auth=self.auth, headers=self._header,
+                                 **kwargs)
 
         elif method == 'PUT':
-            resp = requests.put(url, headers=self._header, **kwargs)
+            resp = requests.put(url, auth=self.auth, headers=self._header,
+                                **kwargs)
 
         elif method == 'DELETE':
-            resp = requests.delete(url, headers=self._header, **kwargs)
-
+            resp = requests.delete(url, auth=self.auth, headers=self._header,
+                                   **kwargs)
         else:
             raise SensuAPIException(
                 'Method {} not implemented'.format(method)
