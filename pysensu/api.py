@@ -188,3 +188,39 @@ class SensuAPI(object):
         """
         self._request('DELETE', '/stashes/{}'.format(path))
         return True
+
+    """
+    Subscriptions ops (non on the API)
+    """
+    def get_subscriptions(self):
+        """
+        Returns all the channels where nodes are subscribed
+        """
+        data = self.get_clients()
+        channels = []
+        for client in data:
+            if 'subscriptions' in client:
+                if isinstance(client['subscriptions'], list):
+                    for channel in client['subscriptions']:
+                        if channel not in channels:
+                            channels.append(channel)
+                else:
+                    if client['subscriptions'] not in channels:
+                        channels.append(client['subscriptions'])
+        return channels
+
+    def get_subscriptions_channel(self, search_channel):
+        """
+        Return all the nodes that are subscribed to the specified channel
+        """
+        data = self.get_clients()
+        clients = []
+        for client in data:
+            if 'subscriptions' in client:
+                if isinstance(client['subscriptions'], list):
+                    if search_channel in client['subscriptions']:
+                        clients.append(client['name'])
+                else:
+                    if search_channel == client['subscriptions']:
+                        clients.append(client['name'])
+        return clients
