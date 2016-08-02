@@ -43,3 +43,6 @@ docs/_build
 
 # vim
 *.sw[o,p]
+
+# rope
+.ropeproject/

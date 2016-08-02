@@ -70,7 +70,7 @@ class SensuAPI(object):
         """
         Returns a list of clients.
         """
-        data = self._request('GET', '/clients/')
+        data = self._request('GET', '/clients')
         return data.json()
 
     def get_client_data(self, client):
@@ -101,7 +101,7 @@ class SensuAPI(object):
         """
         Returns the list of current events.
         """
-        data = self._request('GET', '/events/')
+        data = self._request('GET', '/events')
         return data.json()
 
     def get_all_client_events(self, client):
