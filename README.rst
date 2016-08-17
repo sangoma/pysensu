@@ -18,6 +18,8 @@ This is a client to interact with the Sensu API
 Features
 --------
 
-- Includes methods for some entrypoints (clients, events, checks, stashes) of the Sensu API (0.21)
+- Includes methods for some entrypoints (clients, events, checks, stashes) of the Sensu API (0.24)
+  **IMPORTANT**: from 0.6.0 release we are supporting Sensu API 0.24+ .. backward
+  compatibility with previous versions of Sensu API might be broken.
 - Includes methods for handle subscriptions info (nodes subscribed to a
   specific channel) 
