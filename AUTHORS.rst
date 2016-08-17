@@ -11,3 +11,4 @@ Contributors
 ------------
 
 * David Moreau Simard <dms@redhat.com>
+* Christian Zagrodnick <cz@flyingcircus.io>
