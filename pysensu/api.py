@@ -176,10 +176,10 @@ class SensuAPI(object):
         Create a stash. (JSON document)
         """
         if path:
-            self._request('POST', '/stashes/{}/{}'.format(path),
-                          json.dumps(payload))
+            self._request('POST', '/stashes/{}'.format(path),
+                          json=payload)
         else:
-            self._request('POST', '/stashes/', json.dumps(payload))
+            self._request('POST', '/stashes', json=payload)
         return True
 
     def delete_stash(self, path):
