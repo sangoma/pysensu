@@ -66,12 +66,17 @@ class SensuAPI(object):
     """
     Clients ops
     """
-    def get_clients(self):
+    def get_clients(self, limit=None, offset=None):
         """
         Returns a list of clients.
         """
-        data = self._request('GET', '/clients')
-        return data.json()
+        data = {}
+        if limit:
+            data['limit'] = limit
+        if offset:
+            data['offset'] = offset
+        result = self._request('GET', '/clients', data=json.dumps(data))
+        return result.json()
 
     def get_client_data(self, client):
         """
@@ -156,10 +161,61 @@ class SensuAPI(object):
         """
         data = {
             'check': check,
-            'subscribers': subscribers
+            'subscribers': [subscribers]
         }
-        self._request('POST', '/request', json.dumps(data))
+        self._request('POST', '/request', data=json.dumps(data))
         return True
+
+    """
+    Aggregates ops
+    """
+    def get_aggregates(self):
+        """
+        Returns the list of named aggregates.
+        """
+        data = self._request('GET', '/aggregates')
+        return data.json()
+
+    def get_aggregate_check(self, check, age=None):
+        """
+        Returns the list of aggregates for a given check
+        """
+        data = {}
+        if age:
+            data['max_age'] = age
+
+        result = self._request('GET', '/aggregates/{}'.format(check),
+                               data=json.dumps(data))
+        return result.json()
+
+    def delete_aggregate(self, check):
+        """
+        Deletes all aggregate data for a named aggregate
+        """
+        self._request('DELETE', '/aggregates/{}'.format(check))
+        return True
+
+    """
+    Status ops
+    """
+    def get_info(self):
+        """
+        Returns information on the API.
+        """
+        data = self._request('GET', '/info')
+        return data.json()
+
+    def get_health(self, consumers=2, messages=100):
+        """
+        Returns health information on transport & Redis connections.
+        """
+        data = {'consumers': consumers, 'messages': messages}
+
+        try:
+            self._request('GET', '/health', data=json.dumps(data))
+            return True
+        except SensuAPIException:
+            return False
 
     """
     Stashes ops
