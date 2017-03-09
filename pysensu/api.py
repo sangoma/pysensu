@@ -246,13 +246,16 @@ class SensuAPI(object):
         return True
 
     """
-    Subscriptions ops (non on the API)
+    Subscriptions ops (not directly in the Sensu API)
     """
-    def get_subscriptions(self):
+    def get_subscriptions(self, nodes=[]):
         """
-        Returns all the channels where nodes are subscribed
+        Returns all the channels where (optionally specified) nodes are subscribed
         """
-        data = self.get_clients()
+        if len(nodes) > 0:
+            data = [node for node in self.get_clients() if node['name'] in nodes]
+        else:
+            data = self.get_clients()
         channels = []
         for client in data:
             if 'subscriptions' in client:
