@@ -56,12 +56,19 @@ class SensuAPI(object):
             ))
             return resp
 
+        elif resp.status_code.startswith('400'):
+            logger.error('{}: {}'.format(
+                resp.status_code,
+                resp.text
+            ))
+            raise SensuAPIException('API returned "Bad Request"')
+
         else:
             logger.warning('{}: {}'.format(
                 resp.status_code,
                 resp.text
             ))
-            raise SensuAPIException('API bad response')
+            raise SensuAPIException('API bad response {}: {}'.format(resp.status_code, resp.text))
 
     """
     Clients ops
@@ -164,6 +171,35 @@ class SensuAPI(object):
             'subscribers': [subscribers]
         }
         self._request('POST', '/request', data=json.dumps(data))
+        return True
+
+    """
+    Silenced API ops
+    """
+    def get_silenced(self, limit=None, offset=None):
+        """
+        Returns a list of silence entries.
+        """
+        data = {}
+        if limit:
+            data['limit'] = limit
+        if offset:
+            data['offset'] = offset
+        result = self._request('GET', '/silenced', data=json.dumps(data))
+        return result.json()
+
+    def post_silence_request(self, kwargs):
+        """
+        Create a silence entry.
+        """
+        self._request('POST', '/silenced', data=json.dumps(kwargs))
+        return True
+
+    def clear_silence(self, kwargs):
+        """
+        Clear a silence entry.
+        """
+        self._request('POST', '/silenced/clear', data=json.dumps(kwargs))
         return True
 
     """

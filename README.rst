@@ -23,3 +23,15 @@ Features
   compatibility with previous versions of Sensu API might be broken.
 - Includes methods for handle subscriptions info (nodes subscribed to a
   specific channel) 
+
+
+Trivial Example
+---------------
+
+::
+
+    from pysensu.api import SensuAPI
+
+    url = 'http://localhost:4567'
+    my_sensu = SensuAPI(url, username=username, password=password)
+    print(my_sensu.get_info())

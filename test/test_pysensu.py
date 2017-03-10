@@ -2,7 +2,7 @@
 Tests for `pysensu` module.
 """
 import pytest
-from pysensu import pysensu
+import pysensu
 
 
 class TestPysensu(object):
