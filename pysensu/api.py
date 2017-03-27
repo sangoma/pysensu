@@ -142,7 +142,7 @@ class SensuAPI(object):
         Resolves an event. (delayed action)
         """
         self._request('POST', '/resolve',
-                      json.dumps({'client': client, 'check': check}))
+                      data=json.dumps({'client': client, 'check': check}))
         return True
 
     """
