@@ -142,7 +142,7 @@ class SensuAPI(object):
         Resolves an event. (delayed action)
         """
         self._request('POST', '/resolve',
-                      json.dumps({'client': client, 'check': check}))
+                      data=json.dumps({'client': client, 'check': check}))
         return True
 
     """
@@ -252,6 +252,50 @@ class SensuAPI(object):
             return True
         except SensuAPIException:
             return False
+
+    """
+    Results ops
+    """
+    def get_all_client_results(self):
+        """
+        Returns the list of results.
+        """
+        data = self._request('GET', '/results')
+        return data.json()
+
+    def get_results(self, client):
+        """
+        Returns a result.
+        """
+        data = self._request('GET', '/results/{}'.format(client))
+        return data.json()
+
+    def get_result(self, client, check):
+        """
+        Returns an event for a given client & result name.
+        """
+        data = self._request('GET', '/results/{}/{}'.format(client, check))
+        return data.json()
+
+    def delete_result(self, client, check):
+        """
+        Deletes an check result data for a given check on a given client.
+        """
+        self._request('DELETE', '/results/{}/{}'.format(client, check))
+        return True
+
+    def post_result_data(self, client, check, output, status):
+        """
+        Posts check result data.
+        """
+        data = {
+            'source': client,
+            'name': check,
+            'output': output,
+            'status': status,
+        }
+        self._request('POST', '/results', data=json.dumps(data))
+        return True
 
     """
     Stashes ops
