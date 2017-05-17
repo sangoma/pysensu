@@ -23,7 +23,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='pysensu-ng',
-    version='0.9.0',
+    version='0.10.0',
     description='This is a client to interact with the Sensu API',
     long_description=readme + '\n\n' + doclink + '\n\n' + history,
     author='Angel Velasquez',
