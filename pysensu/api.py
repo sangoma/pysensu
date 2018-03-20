@@ -3,7 +3,7 @@ import logging
 
 import requests
 from requests.auth import HTTPBasicAuth
-from pysensu import USER_AGENT
+from __init__ import USER_AGENT
 
 logger = logging.getLogger(__name__)
 
