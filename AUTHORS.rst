@@ -15,3 +15,4 @@ Contributors
 * Lindsay Hill <lindsay.k.hill@gmail.com>
 * Duncan Hutty <dhutty@cisco.com>
 * Ryan McCabe <rmccabe@redhat.com>
+* Wellington Castello <wcastello@gmail.com>
