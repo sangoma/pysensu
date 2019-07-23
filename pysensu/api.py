@@ -1,11 +1,19 @@
 import json
 import logging
+import http
 
 import requests
 from requests.auth import HTTPBasicAuth
 from . import USER_AGENT
 
+
 logger = logging.getLogger(__name__)
+FORMAT = "%(levelname)s [%(filename)s:%(lineno)s - %(funcName)s() ] %(message)s"
+formatter = logging.Formatter(FORMAT)
+default_handler = logging.StreamHandler()
+default_handler.setFormatter(formatter)
+logger.addHandler(default_handler)
+
 
 
 class SensuAPIException(Exception):
@@ -27,7 +35,8 @@ class SensuAPI(object):
 
     def _request(self, method, path, **kwargs):
         url = '{}{}'.format(self._url_base, path)
-        logger.debug('{} -> {} with {}'.format(method, url, kwargs))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug('{} -> {} with {}'.format(method, url, kwargs))
 
         if method == 'GET':
             resp = requests.get(url, auth=self.auth, headers=self._header,
@@ -50,25 +59,23 @@ class SensuAPI(object):
             )
 
         if resp.status_code in self.good_status:
-            logger.debug('{}: {}'.format(
-                resp.status_code,
-                ''.join(resp.text.split('\n'))[0:80]
-            ))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('{}: {}'.format(
+                    resp.status_code,
+                    ''.join(resp.text.split('\n'))[0:80]
+                ))
             return resp
 
-        elif resp.status_code.startswith('400'):
-            logger.error('{}: {}'.format(
-                resp.status_code,
-                resp.text
-            ))
-            raise SensuAPIException('API returned "Bad Request"')
-
         else:
-            logger.warning('{}: {}'.format(
-                resp.status_code,
-                resp.text
-            ))
-            raise SensuAPIException('API bad response {}: {}'.format(resp.status_code, resp.text))
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('{}: {}'.format(
+                    resp.status_code,
+                    resp.text
+                ))
+            message = '{} {}'.format(resp.status_code, http.HTTPStatus(resp.status_code).phrase)
+            raise SensuAPIException(message)
+
+
 
     """
     Clients ops
